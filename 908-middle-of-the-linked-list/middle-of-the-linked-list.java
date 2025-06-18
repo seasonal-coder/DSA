@@ -8,6 +8,9 @@
  *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
  * }
  */
+
+ //checking leet sync
+ 
 class Solution {
     public ListNode middleNode(ListNode head) {
         if (head.next != null) {
