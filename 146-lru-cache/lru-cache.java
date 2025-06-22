@@ -1,65 +1,77 @@
+import java.util.HashMap;
+import java.util.Map;
+
 class LRUCache {
 
-    class Node {
+    private class Node {
         int key, value;
         Node prev, next;
         Node(int k, int v) {
             key = k;
-            value= v;
+            value = v;
         }
     }
 
-    private int capacity;
-    private Map<Integer, Node> map;
-    private Node head, tail;
-
+    private final int capacity;
+    private final Map<Integer, Node> map;
+    private final Node head, tail;
 
     public LRUCache(int capacity) {
         this.capacity = capacity;
-        map = new HashMap<>();
-        head = new Node(0,0);
-        tail = new Node(0,0);
+        this.map = new HashMap<>();
+
+        head = new Node(0, 0); // dummy head
+        tail = new Node(0, 0); // dummy tail
+
         head.next = tail;
         tail.prev = head;
-        
     }
 
-    private void remove(Node node){
+    public int get(int key) {
+        Node node = map.get(key);
+        if (node == null) return -1;
+
+        // Move to front
         node.prev.next = node.next;
         node.next.prev = node.prev;
-    }
 
-    private void insertToFront(Node node){
         node.next = head.next;
         head.next.prev = node;
-        head.next= node;
-        node.prev= head;
-
-    }
-    
-    public int get(int key) {
-        if(!map.containsKey(key)) return -1;
-        Node node = map.get(key);
-        remove(node);
-        insertToFront(node);
+        head.next = node;
+        node.prev = head;
 
         return node.value;
-        
     }
-    
-    public void put(int key, int value) {
-        if(map.containsKey(key)){
-            remove(map.get(key));
-        }
-        Node node = new Node(key, value);
-        insertToFront(node);
-        map.put(key,node);
 
-        if(map.size()>capacity){
-            Node lru = tail.prev;
-            remove(lru);
-            map.remove(lru.key);
+    public void put(int key, int value) {
+        Node node = map.get(key);
+
+        if (node != null) {
+            node.value = value;
+
+            // Move to front
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+        } else {
+            node = new Node(key, value);
+            map.put(key, node);
+
+            if (map.size() > capacity) {
+                Node lru = tail.prev;
+
+                // Remove from DLL
+                lru.prev.next = tail;
+                tail.prev = lru.prev;
+
+                map.remove(lru.key);
+            }
         }
+
+        // Insert new or updated node at front
+        node.next = head.next;
+        head.next.prev = node;
+        head.next = node;
+        node.prev = head;
     }
 }
 
