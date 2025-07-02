@@ -1,18 +1,17 @@
 class Solution {
-    public boolean uniqueOccurrences(int[] arr) {
-        //freq counter
-        //uniquecheck
+   public boolean uniqueOccurrences(int[] arr) {
+    int[] freq = new int[2001]; // index shift: -1000 to 1000 becomes 0 to 2000
 
-        Map<Integer, Integer> map =  new HashMap<>();
-        for (int i : arr){
-            map.put(i, map.getOrDefault(i,0)+1);
-        }
-
-       Set<Integer> set = new HashSet<>();
-        for (int val : map.values()) {
-        if (!set.add(val)) return false;
-        }
-        return true;
-
+    for (int num : arr) {
+        freq[num + 1000]++;
     }
+
+    Set<Integer> seen = new HashSet<>();
+    for (int count : freq) {
+        if (count == 0) continue;
+        if (!seen.add(count)) return false;
+    }
+
+    return true;
+}
 }
