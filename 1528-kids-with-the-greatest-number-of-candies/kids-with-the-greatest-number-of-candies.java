@@ -5,7 +5,7 @@ class Solution {
         int max = 0;
         for (int c : candies) if(c>max) max=c;
         
-        List<Boolean> res = new ArrayList<>();
+        List<Boolean> res = new ArrayList<>(n);
         for(int c : candies) res.add(c+extraCandies>=max);
 
         return res;
