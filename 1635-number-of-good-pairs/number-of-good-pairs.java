@@ -1,21 +1,16 @@
+import java.util.HashMap;
+import java.util.Map;
+
 class Solution {
     public int numIdenticalPairs(int[] nums) {
-        Arrays.sort(nums);
-        int n = nums.length;
-        int counter = 1;
+        Map<Integer, Integer> freq = new HashMap<>();
         int pairs = 0;
-        for (int i =1; i<n; i++){
-            if(nums[i]==nums[i-1]){
-                counter++;
-            }
-            else{
-                pairs += counter * (counter - 1) / 2;
-
-                counter = 1;
-
-            }
+        for (int x : nums) {
+            // if x has appeared f times before, it forms f new pairs with current x
+            int f = freq.getOrDefault(x, 0);
+            pairs += f;
+            freq.put(x, f + 1);
         }
-        pairs += counter * (counter - 1) / 2;
         return pairs;
     }
 }
