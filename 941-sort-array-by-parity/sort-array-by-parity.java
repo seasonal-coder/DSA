@@ -1,24 +1,18 @@
 class Solution {
     public int[] sortArrayByParity(int[] nums) {
-        int start = 0; 
-        int end = nums.length-1;
-        int temp;
-        while(start<=end){
-            if(nums[start]%2==0){
-                start=start+1;
-            }
-            else if(nums[end]%2!=0){
-                end = end -1;
-
-            }
+        int l =0, r= nums.length-1;
+        int temp =0;
+        while(l<=r){
+            if(nums[l]%2==0 ) l++;
+            else if(nums[r]%2!=0) r--;
             else{
-                temp = nums[start];
-                nums[start] = nums[end];
-                nums[end]= temp;
-
-                start = start+1;
-                end = end-1;   
+                
+                temp = nums[l];
+                nums[l] = nums[r];
+                nums[r] = temp;
             }
+            
+
         }
         return nums;
         
